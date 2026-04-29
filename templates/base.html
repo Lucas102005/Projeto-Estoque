@@ -1,0 +1,11 @@
+<body>
+    <nav>
+        <a href="/estoque">Estoque</a>
+
+        {% if nivel >= 2 %}
+            <a href="/usuarios">Usuários</a>
+        {% endif %}
+    </nav>
+
+    {% block conteudo %}{% endblock %}
+</body>

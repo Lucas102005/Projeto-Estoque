@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3>Lista de Usuários</h3>
+
+<a href="/usuarios/cadastrar" class="btn btn-success mb-3">
+    Novo Usuário
+</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Nascimento</th>
+            <th>Função</th>
+            <th>Gênero</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for u in usuarios %}
+        <tr>
+            <td>{{ u.ID_USUARIO }}</td>
+            <td>{{ u.NM_USUARIO }}</td>
+            <td>{{ u.DS_EMAIL }}</td>
+            <td>{{ u.DT_NASCIMENTO.strftime('%d/%m/%Y') }}</td>
+            <td>{{ u.DS_USUARIO }}</td>
+            <td>{{ u.DS_GENERO }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
