@@ -13,6 +13,9 @@ from datetime import datetime
 
 user_bp = Blueprint("user", __name__)
 
+
+# ================= HOME =================
+
 @user_bp.route("/")
 def home():
 
@@ -23,6 +26,8 @@ def home():
         return redirect("/painel-vendedor")
     else:
         return redirect("/painel-comprador")
+    
+# ================= LOGIN =================
 
 @user_bp.route("/login", methods=["GET", "POST"])
 def login():
@@ -38,7 +43,7 @@ def login():
 
             session["usuario_id"] = usuario["ID_USUARIO"]
             session["funcao"] = usuario["DS_USUARIO"]
-            session["nivel"] = usuario["TP_PERMISSAO"]
+            session["nivel_permissao"] = usuario["TP_PERMISSAO"]
 
             if usuario["DS_USUARIO"] == "vendedor":
                 return redirect("/painel-vendedor")
@@ -49,6 +54,8 @@ def login():
 
     return render_template("login.html")
 
+# ================= LOGOUT =================
+
 @user_bp.route("/logout")
 def logout():
 
@@ -56,15 +63,18 @@ def logout():
 
     return redirect("/login")
 
+# ================= USUÁRIOS =================
+# ========== somente vendedor/admin ==========
+
 @user_bp.route("/usuarios")
 def usuarios():
 
     if "usuario_id" not in session:
         return redirect("/login")
-
-    if session.get("nivel", 0) < 2:
+    
+    if session.get("nivel_permissao", 0) < 2:
         return "Acesso negado"
-
+    
     lista = listar_usuarios()
 
     return render_template(
@@ -72,6 +82,8 @@ def usuarios():
         usuarios=lista,
         nivel=session.get("nivel", 0)
     )
+
+# ================= CADASTRAR USUÁRIOS =================
 
 @user_bp.route("/usuarios/cadastrar", methods=["GET", "POST"])
 def cadastrar_usuario():
@@ -103,6 +115,8 @@ def cadastrar_usuario():
 
     return render_template("cadastrar_usuario.html")
 
+# ================= PAINEL VENDEDOR =================
+
 @user_bp.route("/painel-vendedor")
 def painel_vendedor():
 
@@ -114,13 +128,17 @@ def painel_vendedor():
 
     return render_template("painel_vendedor.html")
 
+# ================= PAINEL COMPRADOR =================
+
 @user_bp.route("/painel-comprador")
 def painel_comprador():
 
     if "usuario_id" not in session:
         return redirect("/login")
-
+    
     return render_template("painel_comprador.html")
+
+# ================= ESTOQUE =================
 
 @user_bp.route("/estoque")
 def estoque():
@@ -128,9 +146,7 @@ def estoque():
     if "usuario_id" not in session:
         return redirect("/login")
 
-    nivel = session.get("nivel", 0)
-
-    if nivel >= 2:
+    if session.get("nivel_permissao", 0) >= 2:
         itens = listar_itens_completo()
 
     else:
@@ -138,6 +154,5 @@ def estoque():
 
     return render_template(
         "estoque.html",
-        itens=itens,
-        nivel=nivel
+        itens=itens
     )
