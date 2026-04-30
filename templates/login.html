@@ -1,14 +1,146 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — Estoque</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f7f8fa;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wrapper {
+            display: flex;
+            align-items: center;
+            gap: 80px;
+        }
+
+        .brand { text-align: left; }
+        .brand h1 { font-size: 42px; font-weight: 800; color: #1a1a2e; letter-spacing: -1px; }
+        .brand h1 span { color: #4f6ef7; }
+        .brand p { color: #888; font-size: 15px; margin-top: 8px; }
+
+        .divider { width: 1px; height: 220px; background: #e8eaed; }
+
+        .card {
+            background: white;
+            border: 1px solid #e8eaed;
+            border-radius: 16px;
+            padding: 36px 32px;
+            width: 360px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+        }
+
+        .card h2 { font-size: 19px; font-weight: 700; margin-bottom: 6px; color: #1a1a2e; }
+        .card p  { font-size: 13px; color: #888; margin-bottom: 24px; }
+
+        .form-group { margin-bottom: 16px; }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #555;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid #dde1e7;
+            border-radius: 8px;
+            font-size: 14px;
+            background: #fafbfc;
+            outline: none;
+            transition: border 0.15s, box-shadow 0.15s;
+        }
+
+        .form-group input:focus {
+            border-color: #4f6ef7;
+            box-shadow: 0 0 0 3px rgba(79,110,247,0.1);
+            background: white;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #4f6ef7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: opacity 0.15s;
+        }
+
+        .btn:hover { opacity: 0.88; }
+
+        .footer-link {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 13px;
+            color: #888;
+        }
+
+        .footer-link a { color: #4f6ef7; text-decoration: none; font-weight: 600; }
+
+        .alert-erro {
+            background: #fff5f5;
+            border: 1px solid #fed7d7;
+            color: #c53030;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 16px;
+        }
+    </style>
 </head>
 <body>
-    <h2>Login</h2>
-    <form action="/login" method="POST">
-        <input type="email" name="email" placeholder="Email" required>
-        <input type="password" name="senha" placeholder="Senha" required>
-        <button type="submit">Entrar</button>
-    </form>
+
+<div class="wrapper">
+    <div class="brand">
+        <h1>Estoque<span>.</span></h1>
+        <p>Gestão simples e rápida<br>do seu inventário.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="card">
+        <h2>Entrar</h2>
+        <p>Acesse sua conta para continuar</p>
+
+        {% if erro %}
+            <div class="alert-erro">{{ erro }}</div>
+        {% endif %}
+
+        <form method="POST">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="seu@email.com" required autofocus>
+            </div>
+            <div class="form-group">
+                <label>Senha</label>
+                <input type="password" name="senha" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn">Entrar</button>
+        </form>
+
+        <div class="footer-link">
+            Não tem conta? <a href="/usuarios/cadastrar">Criar conta</a>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>

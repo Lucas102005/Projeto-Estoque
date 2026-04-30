@@ -1,36 +1,71 @@
-{% extends "base.html" %}
-
+{% extends 'base.html' %}
 {% block content %}
 
-<h3>Lista de Usuários</h3>
+<div class="page-header">
+    <div>
+        <h1>Usuários</h1>
+        <p>{{ usuarios|length }} usuário(s) cadastrado(s)</p>
+    </div>
+    <a href="/usuarios/cadastrar" class="btn btn-primary">+ Novo Usuário</a>
+</div>
 
-<a href="/usuarios/cadastrar" class="btn btn-success mb-3">
-    Novo Usuário
-</a>
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>Email</th>
-            <th>Nascimento</th>
-            <th>Função</th>
-            <th>Gênero</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for u in usuarios %}
-        <tr>
-            <td>{{ u.ID_USUARIO }}</td>
-            <td>{{ u.NM_USUARIO }}</td>
-            <td>{{ u.DS_EMAIL }}</td>
-            <td>{{ u.DT_NASCIMENTO.strftime('%d/%m/%Y') }}</td>
-            <td>{{ u.DS_USUARIO }}</td>
-            <td>{{ u.DS_GENERO }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="card" style="padding: 0; overflow: hidden;">
+    {% if usuarios %}
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Função</th>
+                <th>Gênero</th>
+                <th>Nascimento</th>
+                {% if nivel == 3 %}<th>Ações</th>{% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for u in usuarios %}
+            <tr>
+                <td><strong>{{ u.NM_USUARIO }}</strong></td>
+                <td style="color:#666;">{{ u.DS_EMAIL }}</td>
+                <td>
+                    {% if u.TP_PERMISSAO == 3 %}
+                        <span class="tag" style="background:#faf5ff;color:#6b21a8;">Admin</span>
+                    {% elif u.TP_PERMISSAO == 2 %}
+                        <span class="tag tag-blue">Vendedor</span>
+                    {% else %}
+                        <span class="tag tag-gray">Comprador</span>
+                    {% endif %}
+                </td>
+                <td style="color:#666;">{{ u.DS_GENERO }}</td>
+                <td style="color:#666;">{{ u.DT_NASCIMENTO.strftime('%d/%m/%Y') }}</td>
+                {% if nivel == 3 %}
+                <td>
+                    {% if u.ID_USUARIO != session.get('usuario_id') %}
+                        <button
+                            class="btn btn-danger"
+                            style="padding:5px 12px; font-size:12px;"
+                            onclick="confirmarExclusao(
+                                '/usuarios/excluir/{{ u.ID_USUARIO }}',
+                                'Excluir usuário',
+                                'Deseja excluir &quot;{{ u.NM_USUARIO }}&quot;? Esta ação não pode ser desfeita.'
+                            )">
+                            Excluir
+                        </button>
+                    {% else %}
+                        <span class="tag tag-gray">Você</span>
+                    {% endif %}
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <div class="empty">
+            <div class="empty-icon">👥</div>
+            <p>Nenhum usuário cadastrado.</p>
+        </div>
+    {% endif %}
+</div>
 
 {% endblock %}

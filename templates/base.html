@@ -1,11 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Estoque</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f7f8fa;
+            color: #1a1a2e;
+            min-height: 100vh;
+        }
+
+        /* NAV */
+        nav {
+            background: #ffffff;
+            border-bottom: 1px solid #e8eaed;
+            padding: 0 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 60px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+
+        .nav-logo {
+            font-weight: 700;
+            font-size: 16px;
+            color: #1a1a2e;
+            letter-spacing: -0.3px;
+        }
+
+        .nav-logo span { color: #4f6ef7; }
+
+        .nav-links { display: flex; gap: 4px; align-items: center; }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #555;
+            font-size: 14px;
+            padding: 6px 14px;
+            border-radius: 8px;
+            transition: background 0.15s, color 0.15s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover { background: #f0f2ff; color: #4f6ef7; }
+
+        .nav-links a.active { background: #f0f2ff; color: #4f6ef7; }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            color: #777;
+        }
+
+        .nav-user .badge {
+            background: #f0f2ff;
+            color: #4f6ef7;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .btn-logout {
+            text-decoration: none;
+            color: #e53e3e;
+            font-size: 13px;
+            padding: 5px 12px;
+            border-radius: 8px;
+            border: 1px solid #fed7d7;
+            transition: background 0.15s;
+        }
+
+        .btn-logout:hover { background: #fff5f5; }
+
+        /* CONTAINER */
+        .container { max-width: 1100px; margin: 0 auto; padding: 36px 24px; }
+
+        /* PAGE HEADER */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+        }
+
+        .page-header h1 { font-size: 22px; font-weight: 700; color: #1a1a2e; }
+        .page-header p  { font-size: 13px; color: #888; margin-top: 2px; }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.15s, transform 0.1s;
+        }
+
+        .btn:hover { opacity: 0.88; transform: translateY(-1px); }
+        .btn-primary   { background: #4f6ef7; color: white; }
+        .btn-danger    { background: #e53e3e; color: white; }
+        .btn-warning   { background: #f6ad55; color: white; }
+        .btn-secondary { background: #edf2f7; color: #555; }
+
+        /* CARDS */
+        .card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e8eaed;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        /* TABLE */
+        table { width: 100%; border-collapse: collapse; }
+
+        thead th {
+            text-align: left;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #999;
+            padding: 10px 16px;
+            border-bottom: 1px solid #e8eaed;
+            background: #fafbfc;
+        }
+
+        tbody td {
+            padding: 14px 16px;
+            font-size: 14px;
+            border-bottom: 1px solid #f0f2f5;
+            vertical-align: middle;
+        }
+
+        tbody tr:last-child td { border-bottom: none; }
+        tbody tr:hover td { background: #fafbff; }
+
+        /* TAG */
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .tag-green  { background: #e6fffa; color: #276749; }
+        .tag-blue   { background: #ebf8ff; color: #2b6cb0; }
+        .tag-gray   { background: #f0f2f5; color: #666; }
+        .tag-red    { background: #fff5f5; color: #c53030; }
+
+        /* FORMS */
+        .form-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e8eaed;
+            padding: 32px;
+            max-width: 520px;
+        }
+
+        .form-group { margin-bottom: 20px; }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #dde1e7;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #1a1a2e;
+            background: #fafbfc;
+            transition: border 0.15s, box-shadow 0.15s;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #4f6ef7;
+            box-shadow: 0 0 0 3px rgba(79,110,247,0.1);
+            background: white;
+        }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+        /* ERRO */
+        .alert-erro {
+            background: #fff5f5;
+            border: 1px solid #fed7d7;
+            color: #c53030;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.35);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show { display: flex; }
+
+        .modal {
+            background: white;
+            border-radius: 14px;
+            padding: 32px;
+            width: 380px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .modal h3 { font-size: 17px; margin-bottom: 8px; }
+        .modal p  { font-size: 14px; color: #666; margin-bottom: 24px; }
+
+        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+        /* EMPTY STATE */
+        .empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: #aaa;
+        }
+
+        .empty-icon { font-size: 40px; margin-bottom: 12px; }
+        .empty p { font-size: 14px; }
+    </style>
+</head>
 <body>
-    <nav>
-        <a href="/estoque">Estoque</a>
 
-        {% if nivel >= 2 %}
-            <a href="/usuarios">Usuários</a>
+<nav>
+    <div class="nav-logo">Estoque<span>.</span></div>
+
+    <div class="nav-links">
+        <a href="/estoque">📦 Estoque</a>
+        <a href="/usuarios">👥 Usuários</a>
+    </div>
+
+    <div class="nav-user">
+        {% if session.get('nome') %}
+            <span>{{ session.get('nome') }}</span>
+            <span class="badge" style="{{ 'background:#faf5ff;color:#6b21a8;' if session.get('nivel') == 3 else '' }}">{{ 'Admin' if session.get('nivel') == 3 else ('Vendedor' if session.get('nivel') == 2 else 'Comprador') }}</span>
         {% endif %}
-    </nav>
+        <a href="/logout" class="btn-logout">Sair</a>
+    </div>
+</nav>
 
-    {% block conteudo %}{% endblock %}
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+
+<!-- Modal genérico de confirmação -->
+<div class="modal-overlay" id="modalConfirm">
+    <div class="modal">
+        <h3 id="modalTitle">Confirmar exclusão</h3>
+        <p id="modalMsg">Tem certeza? Esta ação não pode ser desfeita.</p>
+        <div class="modal-actions">
+            <button class="btn btn-secondary" onclick="fecharModal()">Cancelar</button>
+            <form id="modalForm" method="POST">
+                <button type="submit" class="btn btn-danger">Excluir</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function confirmarExclusao(url, titulo, msg) {
+        document.getElementById('modalTitle').textContent = titulo || 'Confirmar exclusão';
+        document.getElementById('modalMsg').textContent   = msg   || 'Tem certeza? Esta ação não pode ser desfeita.';
+        document.getElementById('modalForm').action = url;
+        document.getElementById('modalConfirm').classList.add('show');
+    }
+
+    function fecharModal() {
+        document.getElementById('modalConfirm').classList.remove('show');
+    }
+
+    document.getElementById('modalConfirm').addEventListener('click', function(e) {
+        if (e.target === this) fecharModal();
+    });
+
+    // Marca link ativo no nav
+    document.querySelectorAll('.nav-links a').forEach(a => {
+        if (window.location.pathname.startsWith(a.getAttribute('href'))) {
+            a.classList.add('active');
+        }
+    });
+</script>
+
 </body>
+</html>

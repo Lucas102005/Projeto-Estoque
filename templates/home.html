@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Estoque</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f7f8fa;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card {
+            text-align: center;
+            background: white;
+            border: 1px solid #e8eaed;
+            border-radius: 16px;
+            padding: 56px 48px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+        }
+        h1 { font-size: 40px; font-weight: 800; color: #1a1a2e; letter-spacing: -1px; }
+        h1 span { color: #4f6ef7; }
+        p { color: #888; font-size: 15px; margin: 10px 0 36px; }
+        .btns { display: flex; gap: 12px; justify-content: center; }
+        .btn {
+            padding: 12px 28px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: opacity 0.15s;
+        }
+        .btn:hover { opacity: 0.88; }
+        .btn-primary { background: #4f6ef7; color: white; }
+        .btn-outline { border: 1.5px solid #dde1e7; color: #444; background: white; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>Estoque<span>.</span></h1>
+    <p>Gestão simples e rápida do seu inventário.</p>
+    <div class="btns">
+        <a href="/login" class="btn btn-primary">Entrar</a>
+        <a href="/usuarios/cadastrar" class="btn btn-outline">Criar Conta</a>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>Novo Produto</h1>
+        <p>Preencha os dados para cadastrar</p>
+    </div>
+    <a href="/estoque" class="btn btn-secondary">← Voltar</a>
+</div>
+
+<div class="form-card">
+    <form method="POST">
+        <div class="form-group">
+            <label>Nome do Produto</label>
+            <input name="nome" placeholder="Ex: Notebook Dell" required>
+        </div>
+        <div class="form-group">
+            <label>Descrição</label>
+            <input name="descricao" placeholder="Breve descrição" required>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Preço (R$)</label>
+                <input name="preco" type="number" step="0.01" min="0" placeholder="0,00" required>
+            </div>
+            <div class="form-group">
+                <label>Quantidade</label>
+                <input name="quantidade" type="number" min="0" placeholder="0" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; margin-top:8px;">Salvar Produto</button>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,60 +1,134 @@
-<form method = "POST">
-    
-    <input 
-      class = "form-control mb-3" 
-      name = "nome" 
-      placeholder = "Nome" 
-      required
-    >
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Conta — Estoque</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f7f8fa;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 16px;
+        }
+        .card {
+            background: white;
+            border: 1px solid #e8eaed;
+            border-radius: 16px;
+            padding: 36px 32px;
+            width: 480px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+        }
+        .card h2 { font-size: 20px; font-weight: 700; margin-bottom: 4px; color: #1a1a2e; }
+        .card > p { font-size: 13px; color: #888; margin-bottom: 24px; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #555;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #dde1e7;
+            border-radius: 8px;
+            font-size: 14px;
+            background: #fafbfc;
+            outline: none;
+            transition: border 0.15s, box-shadow 0.15s;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #4f6ef7;
+            box-shadow: 0 0 0 3px rgba(79,110,247,0.1);
+            background: white;
+        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #4f6ef7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: opacity 0.15s;
+        }
+        .btn:hover { opacity: 0.88; }
+        .footer-link { text-align: center; margin-top: 18px; font-size: 13px; color: #888; }
+        .footer-link a { color: #4f6ef7; text-decoration: none; font-weight: 600; }
+        .alert-erro {
+            background: #fff5f5;
+            border: 1px solid #fed7d7;
+            color: #c53030;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>Criar Conta</h2>
+    <p>Preencha seus dados para se cadastrar</p>
 
-    <input 
-      class = "form-control mb-3" 
-      type = "email" 
-      name = "email" 
-      placeholder = "Email" 
-      required
-    >
+    {% if erro %}
+        <div class="alert-erro">{{ erro }}</div>
+    {% endif %}
 
-    <input 
-      class= "form-control mb-3"
-      type= "password" 
-      name= "senha" 
-      placeholder= "Senha"
-      required
-    >
+    <form method="POST">
+        <div class="form-group">
+            <label>Nome completo</label>
+            <input name="nome" placeholder="Seu nome" required>
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" placeholder="seu@email.com" required>
+        </div>
+        <div class="form-group">
+            <label>Senha</label>
+            <input type="password" name="senha" placeholder="••••••••" required>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Nascimento</label>
+                <input type="date" name="nascimento" required>
+            </div>
+            <div class="form-group">
+                <label>Gênero</label>
+                <select name="genero">
+                    <option value="Masculino">Masculino</option>
+                    <option value="Feminino">Feminino</option>
+                    <option value="Outro">Outro</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Função</label>
+            <select name="funcao">
+                <option value="comprador">Comprador</option>
+                <option value="vendedor">Vendedor</option>
+            </select>
+        </div>
+        <button type="submit" class="btn">Criar Conta</button>
+    </form>
 
-    <input 
-      class = "form-control mb-3"
-      type = "date"
-      name = "nascimento"
-      required
-    >
-
-    <select 
-      class="form-control mb-3" 
-      name="funcao">
-        <option value = "vendedor"> Vendedor </option>
-        <option value = "comprador"> Comprador </option>
-    </select>
-
-    <select 
-      class = "form-control mb-3" 
-      name = "genero">
-        <option value = "Masculino"> Masculino </option>
-        <option value = "Feminino"> Feminino</option>
-        <option value = "Outro"> Outro </option>
-    </select> 
-
-    <input
-      type="password"
-      name="senha"
-      class="form-control mb-3"
-      placeholder="Senha"
-      required      
-    >
-
-    <button 
-      class = "btn btn-primary w-100"> Cadastrar 
-    </button>
-
-</form>
+    <div class="footer-link">
+        Já tem conta? <a href="/login">Entrar</a>
+    </div>
+</div>
+</body>
+</html>

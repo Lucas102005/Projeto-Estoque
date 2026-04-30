@@ -1,7 +1,66 @@
-{% if nivel >= 1 %}
-    <!-- Restrição a nível de comprador -->
-{% endif %}
+{% extends 'base.html' %}
+{% block content %}
 
-{% if nivel >= 2 %}
-    <!-- Permissão de vizualização de registros a nível de vendedor -->
-{% endif %}
+<div class="page-header">
+    <div>
+        <h1>Estoque</h1>
+        <p>{{ produtos|length }} produto(s) cadastrado(s)</p>
+    </div>
+    {% if nivel == 2 %}
+        <a href="/produtos/cadastrar" class="btn btn-primary">+ Novo Produto</a>
+    {% endif %}
+</div>
+
+<div class="card" style="padding: 0; overflow: hidden;">
+    {% if produtos %}
+    <table>
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Descrição</th>
+                <th>Preço</th>
+                <th>Estoque</th>
+                {% if nivel == 2 %}<th>Ações</th>{% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in produtos %}
+            <tr>
+                <td><strong>{{ p.NM_PRODUTO }}</strong></td>
+                <td style="color:#666;">{{ p.DS_PRODUTO }}</td>
+                <td><strong>R$ {{ "%.2f"|format(p.VR_PRODUTO) }}</strong></td>
+                <td>
+                    {% if p.QT_PRODUTO <= 5 %}
+                        <span class="tag tag-red">{{ p.QT_PRODUTO }} un</span>
+                    {% elif p.QT_PRODUTO <= 20 %}
+                        <span class="tag tag-blue">{{ p.QT_PRODUTO }} un</span>
+                    {% else %}
+                        <span class="tag tag-green">{{ p.QT_PRODUTO }} un</span>
+                    {% endif %}
+                </td>
+                {% if nivel == 2 %}
+                <td>
+                    <div style="display:flex; gap:6px;">
+                        <a href="/produtos/editar/{{ p.ID_PRODUTO }}" class="btn btn-warning" style="padding:5px 12px; font-size:12px;">Editar</a>
+                        <button
+                            class="btn btn-danger"
+                            style="padding:5px 12px; font-size:12px;"
+                            onclick="confirmarExclusao('/produtos/excluir/{{ p.ID_PRODUTO }}', 'Excluir produto', 'Deseja excluir &quot;{{ p.NM_PRODUTO }}&quot;? Esta ação não pode ser desfeita.')">
+                            Excluir
+                        </button>
+                    </div>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+        <div class="empty">
+            <div class="empty-icon">📦</div>
+            <p>Nenhum produto cadastrado ainda.</p>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}
