@@ -6,9 +6,9 @@ load_dotenv()
 
 def conectar():
     return psycopg2.connect(
-        host="db.qmpmfxpskjyiseuzuond.supabase.co",
-        database="postgres",
-        user="postgres",
+        host=os.getenv("DB_HOST"),
+        database=os.getenv("DB_NAME"),
+        user=os.getenv("DB_USER"),
         password=os.getenv("DB_PASSWORD"),
-        port="5432"
+        port=os.getenv("DB_PORT")
     )
