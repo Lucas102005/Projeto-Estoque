@@ -1,8 +1,8 @@
-from database import conectar
+import psycopg2.extras
 
 def inserir_produto(nome, descricao, preco, quantidade):
     conexao = conectar()
-    cursor = conexao.cursor()
+    cursor = conexao.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     sql = """
         INSERT INTO produtos (NM_PRODUTO, DS_PRODUTO, VR_PRODUTO, QT_PRODUTO)
         VALUES (%s, %s, %s, %s)
@@ -32,7 +32,7 @@ def buscar_produto_por_id(id_produto):
 
 def atualizar_produto(id_produto, nome, descricao, preco, quantidade):
     conexao = conectar()
-    cursor = conexao.cursor()
+    cursor = conexao.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     sql = """
         UPDATE produtos
         SET NM_PRODUTO = %s, DS_PRODUTO = %s, VR_PRODUTO = %s, QT_PRODUTO = %s
