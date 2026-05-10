@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>Fazer Compra</h1>
+        <p>Selecione os produtos e quantidades desejadas</p>
+    </div>
+</div>
+
+<form method="POST" action="/comprar/finalizar">
+    <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 20px;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Descrição</th>
+                    <th>Preço</th>
+                    <th>Disponível</th>
+                    <th>Quantidade</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in produtos %}
+                {% if p.QT_PRODUTO > 0 %}
+                <tr>
+                    <td><strong>{{ p.NM_PRODUTO }}</strong></td>
+                    <td style="color:#666;">{{ p.DS_PRODUTO }}</td>
+                    <td><strong>R$ {{ "%.2f"|format(p.VR_PRODUTO) }}</strong></td>
+                    <td>
+                        {% if p.QT_PRODUTO <= 5 %}
+                            <span class="tag tag-red">{{ p.QT_PRODUTO }} un</span>
+                        {% else %}
+                            <span class="tag tag-green">{{ p.QT_PRODUTO }} un</span>
+                        {% endif %}
+                    </td>
+                    <td style="width: 120px;">
+                        <input
+                            type="number"
+                            name="quantidade_{{ p.ID_PRODUTO }}"
+                            min="0"
+                            max="{{ p.QT_PRODUTO }}"
+                            value="0"
+                            style="width:80px; padding:6px 10px; border:1px solid #dde1e7; border-radius:8px; font-size:14px; text-align:center;"
+                        >
+                        <input type="hidden" name="preco_{{ p.ID_PRODUTO }}" value="{{ p.VR_PRODUTO }}">
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div style="display:flex; justify-content:flex-end;">
+        <button type="submit" class="btn btn-success" style="padding: 12px 32px; font-size:15px;">
+            ✅ Finalizar Pedido
+        </button>
+    </div>
+</form>
+
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>Pedidos Pendentes</h1>
+        <p>{{ pendentes|length }} pedido(s) aguardando aprovação</p>
+    </div>
+</div>
+
+{% if pendentes %}
+    {% for v in pendentes %}
+    <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px;">
+            <div>
+                <strong style="font-size:15px;">Pedido #{{ v.ID_VENDA }}</strong>
+                <span style="color:#888; font-size:13px; margin-left:12px;">{{ v.DT_VENDA.strftime('%d/%m/%Y') }}</span>
+                <div style="margin-top:4px; font-size:13px; color:#666;">Comprador: <strong>{{ v.NM_USUARIO }}</strong></div>
+            </div>
+            <strong style="font-size:16px;">R$ {{ "%.2f"|format(v.VR_VENDA) }}</strong>
+        </div>
+
+        <table style="margin-bottom:16px;">
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Valor Unit.</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in v.itens %}
+                <tr>
+                    <td>{{ item.NM_PRODUTO }}</td>
+                    <td>{{ item.QT_PRODUTO }}</td>
+                    <td>R$ {{ "%.2f"|format(item.VR_UNITARIO) }}</td>
+                    <td><strong>R$ {{ "%.2f"|format(item.QT_PRODUTO * item.VR_UNITARIO) }}</strong></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div style="display:flex; gap:10px; justify-content:flex-end;">
+            <button
+                class="btn btn-danger"
+                onclick="confirmarAcao(
+                    '/pedidos/rejeitar/{{ v.ID_VENDA }}',
+                    'Rejeitar pedido',
+                    'Deseja rejeitar o pedido #{{ v.ID_VENDA }} de {{ v.NM_USUARIO }}?',
+                    'Rejeitar',
+                    'btn-danger'
+                )">
+                ❌ Rejeitar
+            </button>
+            <button
+                class="btn btn-success"
+                onclick="confirmarAcao(
+                    '/pedidos/aprovar/{{ v.ID_VENDA }}',
+                    'Aprovar pedido',
+                    'Confirmar aprovação do pedido #{{ v.ID_VENDA }}? O estoque será abatido automaticamente.',
+                    'Aprovar',
+                    'btn-success'
+                )">
+                ✅ Aprovar
+            </button>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="empty">
+        <div class="empty-icon">📋</div>
+        <p>Nenhum pedido pendente no momento.</p>
+    </div>
+{% endif %}
+
+{% endblock %}

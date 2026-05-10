@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>Minhas Compras</h1>
+        <p>Histórico dos seus pedidos</p>
+    </div>
+    <a href="/comprar" class="btn btn-primary">+ Nova Compra</a>
+</div>
+
+{% if vendas %}
+    {% for v in vendas %}
+    <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+                <strong>Pedido #{{ v.ID_VENDA }}</strong>
+                <span style="color:#888; font-size:13px; margin-left:12px;">{{ v.DT_VENDA.strftime('%d/%m/%Y') }}</span>
+            </div>
+            <div style="display:flex; align-items:center; gap:16px;">
+                <strong>R$ {{ "%.2f"|format(v.VR_VENDA) }}</strong>
+                {% if v.DS_STATUS == 'pendente' %}
+                    <span class="tag tag-yellow">⏳ Aguardando aprovação</span>
+                {% elif v.DS_STATUS == 'aprovado' %}
+                    <span class="tag tag-green">✅ Aprovado</span>
+                {% else %}
+                    <span class="tag tag-red">❌ Rejeitado</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="empty">
+        <div class="empty-icon">🛒</div>
+        <p>Você ainda não fez nenhuma compra.</p>
+    </div>
+{% endif %}
+
+{% endblock %}

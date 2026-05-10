@@ -1,9 +1,8 @@
-import psycopg2.extras
-
+from database import conectar
 
 def inserir_usuario(nome, email, senha, nascimento, funcao, genero, nivel):
     conexao = conectar()
-    cursor = conexao.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cursor = conexao.cursor()
     sql = """
         INSERT INTO usuarios (NM_USUARIO, DS_EMAIL, DS_SENHA, DT_NASCIMENTO, DS_USUARIO, DS_GENERO, TP_PERMISSAO)
         VALUES (%s, %s, %s, %s, %s, %s, %s)
@@ -33,7 +32,7 @@ def listar_usuarios():
 
 def excluir_usuario(id_usuario):
     conexao = conectar()
-    cursor = conexao.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cursor = conexao.cursor()
     cursor.execute("DELETE FROM usuarios WHERE ID_USUARIO = %s", (id_usuario,))
     conexao.commit()
     cursor.close()
